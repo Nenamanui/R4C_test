@@ -2,6 +2,7 @@ from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime as dt
+from .models import Robot
 
 @csrf_exempt
 def add(request):
@@ -18,6 +19,13 @@ def add(request):
             version = data.get('version')
             created = data.get('created')
 
+            robot = Robot(
+                serial = serial,
+                model = model,
+                version = version,
+                created = dt.strptime(created, "%Y-%m-%d %H:%M:%S")
+            )
+            robot.save()
 
             response_data = {
                 'status': 'success',
